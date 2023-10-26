@@ -36,7 +36,6 @@ const Home: NextPage = () => {
 
   return (
     <div>
-      <div className="">DUng</div>
       <div >
         <ConnectWallet
           dropdownPosition={{
@@ -44,8 +43,9 @@ const Home: NextPage = () => {
             align: "center",
           }}
         />
-        <span className="text-[0.9rem] font-bold text-red-600">
-          {totalArt?.toString()} 🎨
+        <span className="bg-yellow-300">
+          1
+          {totalArt?.toString()}
         </span>
       </div>
     </div>
