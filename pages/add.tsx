@@ -7,24 +7,24 @@ import { ethers } from 'ethers';
 
 export default function AddPage() {
     const address = useAddress();
-    const contractAddress = "0xC74E4380380235380f218f8783e27F5aA0A5428f";
+    const contractAddress = "0xBC11305239835f7820d39745fB27D60276B72564";
 
 
     const [isValueTitle, setIsValueTitle] = useState<string>('');
     const [isDescription, setIsDescription] = useState<string>('');
     const [isImage, setIsImage] = useState<string>('');
     const [isTarget, setIsTarget] = useState<string>('');
-    const [isStartTime, setIsStartTime] = useState<any>();
-    const [isDeadline, setIsDeadline] = useState<any>();
+    const [isStartTime, setIsStartTime] = useState<string>('');
+    const [isDeadline, setIsDeadline] = useState<string>('');
 
     return (
         <DefaultLayout>
             <motion.main className="min-h-screen bg-[#030014] text-white">
                 <div className='flex flex-col items-center'>
                     <div className='h-[300px]'>
-                        <Image src={'https://reflect.app/home/build/q-6c12dbae.png'} width={500} height={500} alt="" className='w-full h-full object-cover' />
+                        <Image priority={true} src={'https://reflect.app/home/build/q-6c12dbae.png'} width={500} height={500} alt="" className='w-full h-full object-cover' />
                     </div>
-                    <h1 className='uppercase font-bold text-2xl translate-y-[-50%]'>Tạo dự án  </h1>
+                    <h1 className='uppercase font-bold text-2xl translate-y-[-50%]'>Tạo dự án</h1>
                     {
                         address ? (
                             <div className='mt-4 w-full flex flex-col gap-3 items-start px-3'>
@@ -70,8 +70,8 @@ export default function AddPage() {
                                             setIsDescription('');
                                             setIsImage('');
                                             setIsTarget('');
-                                            setIsStartTime(0);
-                                            setIsDeadline(0);
+                                            setIsStartTime('');
+                                            setIsDeadline('');
                                         }}
                                     >
                                         <span className="text-[0.85rem]">{" Buy a Art 0.01ETH"}</span>
