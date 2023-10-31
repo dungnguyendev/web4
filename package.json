@@ -11,9 +11,11 @@
     "deploy": "next build && next export && npx thirdweb@latest upload out"
   },
   "dependencies": {
+    "@reacticons/ionicons": "^7.1.0",
     "@thirdweb-dev/react": "^4",
     "@thirdweb-dev/sdk": "^4",
     "ethers": "^5",
+    "framer-motion": "^10.16.4",
     "next": "^13",
     "react": "^18.2",
     "react-dom": "^18.2"
@@ -22,6 +24,7 @@
     "@types/node": "^18.11.11",
     "@types/react": "^18",
     "autoprefixer": "^10.4.16",
+    "daisyui": "^3.9.3",
     "eslint": "^8.29.0",
     "eslint-config-next": "^13",
     "postcss": "^8.4.31",

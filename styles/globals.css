@@ -9,3 +9,13 @@ body {
   margin: 0;
   font-family: "Inter", sans-serif;
 }
+
+/* REMOVE SCROLLBAR  */
+.remove-scroll-bar::-webkit-scrollbar {
+  display: none;
+}
+
+/* CUSTOM SCROLLBAR  */
+.custom-scroll-bar::-webkit-scrollbar {
+  width: 0px;
+}

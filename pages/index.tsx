@@ -1,14 +1,28 @@
+'use client'
+
+import IonIcon from "@reacticons/ionicons";
 import {
-  ConnectWallet,
+  Web3Button,
   useAddress,
   useContract,
-  useContractRead,
+  useContractRead
 } from "@thirdweb-dev/react";
+import { ethers } from "ethers";
 import { NextPage } from "next";
+import Image from "next/image";
 import { useEffect, useState } from "react";
+import Item from "./components/customs/Item";
+import Header from "./components/layouts/Header";
+import { motion } from 'framer-motion'
+import DefaultLayout from "./components/layouts/DefaultLayout";
 
 const Home: NextPage = () => {
   const [isMobile, setIsMobile] = useState(false);
+  const [isDetail, setIsDetail] = useState<any | null>(null);
+  const [isDonate, setIsDonate] = useState<boolean>(false);
+
+  const [isValueDonate, setIsValueDonate] = useState<number>(0);
+  const [isChoose, setIsChoose] = useState<number>(0);
 
   const address = useAddress();
   const contractAddress = "0xC74E4380380235380f218f8783e27F5aA0A5428f";
@@ -41,40 +55,105 @@ const Home: NextPage = () => {
   }
 
   return (
-    <div>
-      <div>
-        <ConnectWallet
-          dropdownPosition={{
-            side: "bottom",
-            align: "center",
-          }}
-        />
-        <span className="bg-yellow-300">
-          1
-          {address ? (
-            <div>
-              <h1>Tất cả dự án</h1>
-              <div>
-                {loadingGetProjects
-                  ? "Loading"
-                  : getProjects.map((item: any, i: number) => {
-                    if (i === 0) return null;
-                    console.log(item[9]);
-                      
-                      return (
-                        <div key={i}>
-                          <img src={item[9]} alt="" />
-                        </div>
-                      );
-                    })}
+    <DefaultLayout>
+      <motion.main className="min-h-screen bg-[#030014]"
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5, ease: "easeInOut", bounce: 0.5 }}
+      >
+        <div className="p-3 flex flex-col gap-3">
+          <div className="relative m-auto">
+            <Image src={`https://reflect.app/home/build/q-44e26a19.png`} width={500} height={500} alt="" />
+            <h1 className="absolute left-1/2 translate-x-[-50%] -translate-y-[50%] bottom-6 uppercase text-white font-bold text-3xl tracking-wider">Ethe<span className="text-[#5642d1]">reum</span> </h1>
+          </div>
+          <div className="flex flex-col gap-3">
+            {loadingGetProjects
+              ? [1, 2, 3].map((_, index) => (
+                <div key={index} className="w-full animate-pulse bg-[#271b70] rounded-lg shadow-md p-4">
+                  <div className="h-[300px] bg-[#342592] w-full rounded-lg"></div>
+                  <div className="w-full mt-4 flex flex-col gap-2">
+                    <span className="w-[90%] p-2 rounded-full bg-[#342592]"></span>
+                    <span className="w-[90%] p-2 rounded-full bg-[#342592]"></span>
+                    <span className="w-[90%] p-2 rounded-full bg-[#342592]"></span>
+                  </div>
+                </div>
+              ))
+              : getProjects.map((item: any, i: number) => {
+                if (i === 0) return null;
+                return (
+                  <Item key={i} image={item[9]} onClick={() => {
+                    setIsDetail(item)
+                    setIsChoose(i)
+                  }} title={item[1]} description={item.description} />
+                );
+              })}
+          </div>
+        </div>
+        {
+          isDetail !== null && (
+            <motion.div className="fixed top-0 left-0 bottom-0 overflow-y-scroll right-0 bg-[#030014]"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, ease: "easeInOut", bounce: 0.5 }}
+            >
+              <div className="mt-[4.4rem]">
+                <div className="h-[400] relative rounded-lg  px-3">
+                  <button
+                    className=" text-black absolute top-2 right-4"
+                    onClick={() => setIsDetail(null)}
+                  >
+                    <IonIcon name="close" className="text-3xl text-[#ffffff]" />
+                  </button>
+                  <Image src={isDetail[9]} width={500} height={500} alt='' className='w-ful h-full border-2 border-[#342592] rounded-lg object-cover' />
+                </div>
+                <div className='p-3 flex  mt-3 flex-col gap-2'>
+                  <div>
+                    <h1 className='text-[#ffffff]  font-semibold text-2xl'>{isDetail[1]}</h1>
+                    <span className="text-sm text-[#aaaaaa] ">{isDetail[0]}</span>
+                  </div>
+                  <p className=' text-[#aaaaaa] mt-2 text-sm'>{isDetail.description}</p>
+                  <button className={`text-sm mt-2 duration-150 active:scale-90 py-2 font-semibold w-full rounded-lg  text-white ${isDonate ? 'bg-red-500' : 'bg-blue-700'}`}
+                    onClick={() => setIsDonate(!isDonate)}
+                  >
+                    {isDonate ? 'Canncel' : 'Donate'}
+                  </button>
+                  {isDonate && (
+                    <div className="mt-2 flex flex-col gap-4">
+                      <input type="number" className="w-full bg-[#e0e0e0] placeholder:text-gray-500 outline-none rounded-lg py-2 px-4" placeholder="Số tiền donate" value={isValueDonate} onChange={(e) => setIsValueDonate(Number(e.target.value))} />
+                      {
+                        address ? (
+                          <Web3Button
+                            contractAddress={contractAddress}
+                            action={(contract) => {
+                              if (isValueDonate < 0.01) {
+                                alert("Số tiền donate phải lớn hơn 0.01ETH");
+                              } else {
+                                contract.call("donateToCampaign", [isChoose], { value: ethers.utils.parseEther(isValueDonate.toString()) })
+                              }
+                            }
+                            }
+                            onSuccess={() => {
+                              setIsDonate(false);
+                              setIsValueDonate(0);
+                            }}
+                          >
+                            <span className="text-[0.85rem]">{"Donate to project"}</span>
+                          </Web3Button>
+                        ) : (
+                          <span className="p-2 rounded-lg text-center text-white bg-red-500">Vui lòng kết nối ví</span>
+                        )
+                      }
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
-          ) : (
-            "Vui lòng đăng nhập"
-          )}
-        </span>
-      </div>
-    </div>
+
+
+            </motion.div>
+          )
+        }
+      </motion.main >
+    </DefaultLayout>
   );
 };
 
