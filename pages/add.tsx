@@ -13,9 +13,9 @@ export default function AddPage() {
     const [isValueTitle, setIsValueTitle] = useState<string>('');
     const [isDescription, setIsDescription] = useState<string>('');
     const [isImage, setIsImage] = useState<string>('');
-    const [isTarget, setIsTarget] = useState<number>();
-    const [isStartTime, setIsStartTime] = useState<number>();
-    const [isDeadline, setIsDeadline] = useState<number>();
+    const [isTarget, setIsTarget] = useState<string>('');
+    const [isStartTime, setIsStartTime] = useState<any>();
+    const [isDeadline, setIsDeadline] = useState<any>();
 
     return (
         <DefaultLayout>
@@ -38,15 +38,15 @@ export default function AddPage() {
                                 </div>
                                 <div className='flex flex-col w-full gap-2'>
                                     <label htmlFor="target" className='font-semibold text-sm text-[#c0c0c0]'>Target</label>
-                                    <input type="number" id='target' placeholder='...' className='py-2 text-[#c0c0c0] outline-none rounded-lg text-sm px-4 border border-[#666464] bg-[#ffffff1e]' value={isTarget} onChange={(e) => setIsTarget(Number(e.target.value))} />
+                                    <input type="text" id='target' placeholder='...' className='py-2 text-[#c0c0c0] outline-none rounded-lg text-sm px-4 border border-[#666464] bg-[#ffffff1e]' value={isTarget} onChange={(e) => setIsTarget(e.target.value)} />
                                 </div>
                                 <div className='flex flex-col w-full gap-2'>
                                     <label htmlFor="startTime" className='font-semibold text-sm text-[#c0c0c0]'>Start Time</label>
-                                    <input type="number" id='startTime' placeholder='...' className='py-2 text-[#c0c0c0] outline-none rounded-lg text-sm px-4 border border-[#666464] bg-[#ffffff1e]' value={isStartTime} onChange={(e) => setIsStartTime(Number(e.target.value))} />
+                                    <input type="date" id='startTime' placeholder='...' className='py-2 text-[#c0c0c0] outline-none rounded-lg text-sm px-4 border border-[#666464] bg-[#ffffff1e]' value={isStartTime} onChange={(e) => setIsStartTime(e.target.value)} />
                                 </div>
                                 <div className='flex flex-col w-full gap-2'>
                                     <label htmlFor="deadline" className='font-semibold text-sm text-[#c0c0c0]'>Deadline</label>
-                                    <input type="number" id='deadline' placeholder='...' className='py-2 text-[#c0c0c0] outline-none rounded-lg text-sm px-4 border border-[#666464] bg-[#ffffff1e]' value={isDeadline} onChange={(e) => setIsDeadline(Number(e.target.value))} />
+                                    <input type="date" id='deadline' placeholder='...' className='py-2 text-[#c0c0c0] outline-none rounded-lg text-sm px-4 border border-[#666464] bg-[#ffffff1e]' value={isDeadline} onChange={(e) => setIsDeadline(e.target.value)} />
                                 </div>
                                 <div className='flex flex-col w-full gap-2'>
                                     <label htmlFor="description" className='font-semibold text-sm text-[#c0c0c0]'>Description</label>
@@ -60,14 +60,16 @@ export default function AddPage() {
                                                 alert('Vui lòng nhập đủ thông tin');
                                                 return;
                                             } else {
-                                                contract.call("createCampaign", [address, isValueTitle, isDescription, isTarget, isStartTime, isDeadline, isImage], { value: ethers.utils.parseEther("0.01") })
+                                                console.log(address, isValueTitle, isDescription, ethers.utils.parseUnits(isTarget, 18), new Date(isStartTime).getTime(), new Date(isDeadline).getTime(), isImage);
+
+                                                contract.call("createCampaign", [address, isValueTitle, isDescription, ethers.utils.parseUnits(isTarget, 18), new Date(isStartTime).getTime(), new Date(isDeadline).getTime(), isImage])
                                             }
                                         }}
                                         onSuccess={() => {
                                             setIsValueTitle('');
                                             setIsDescription('');
                                             setIsImage('');
-                                            setIsTarget(0);
+                                            setIsTarget('');
                                             setIsStartTime(0);
                                             setIsDeadline(0);
                                         }}
