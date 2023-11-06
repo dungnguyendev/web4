@@ -3,7 +3,7 @@ const nextConfig = {
   reactStrictMode: true,
   basePath: "",
   images: {
-    domains: ["i.pinimg.com", "reflect.app", "www.pinterest.com"],
+    domains: ["i.pinimg.com", "reflect.app", "www.pinterest.com","encrypted-tbn0.gstatic.com"],
   },
 };
 
